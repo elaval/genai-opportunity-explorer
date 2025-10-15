@@ -28,9 +28,9 @@ genai-opportunity-explorer/
 │   ├── layout.tsx              # Root layout with Header/Footer ✅
 │   ├── page.tsx                # Landing page wrapper with Suspense ✅
 │   ├── globals.css             # Global styles with Tailwind ✅
-│   ├── cases/[id]/            # Case detail pages ❌ NOT IMPLEMENTED
-│   ├── assessment/            # Assessment flow ❌ NOT IMPLEMENTED
-│   └── advanced/              # Advanced explorer ❌ NOT IMPLEMENTED
+│   ├── cases/[id]/            # Case detail pages ✅
+│   ├── assessment/            # Assessment flow ✅
+│   └── advanced/              # Advanced explorer ✅
 │
 ├── components/
 │   ├── Header.tsx             # Sticky header with navigation ✅
@@ -111,97 +111,34 @@ genai-opportunity-explorer/
 - ✅ URL parameters for filter state
 - ✅ Shareable filtered views
 
----
+### Case Detail Experience (`app/cases/[id]/page.tsx`)
+- ✅ Dynamic metadata + filter-aware back link
+- ✅ Hero section with organization, sector, verification badge, and difficulty
+- ✅ Two-column layout with challenge, solution, results, key insight
+- ✅ Sidebar “At a Glance” panel plus technology details and sources
+- ✅ Generated success factors, challenges, and implementation roadmap
+- ✅ Related opportunities carousel reusing `OpportunityCard`
 
-## ❌ Not Yet Implemented (High Priority)
+### Guided Assessment (`app/assessment/page.tsx`)
+- ✅ Three-step wizard with animated progress and validation per step
+- ✅ Goal, industry/org size, and timeline inputs with live match counts
+- ✅ Recommendations view showing top 3 cases with fit score badges
+- ✅ Restart option and dynamic empty-state guidance
 
-### 1. Case Detail Pages (`app/cases/[id]/page.tsx`)
-**Status:** Not started
-**Priority:** 🔴 HIGH - This is the most important missing feature
-**Effort:** ~4-6 hours
-
-**What's Needed:**
-```typescript
-// app/cases/[id]/page.tsx
-import { useCases } from '@/lib/data';
-import { getRelatedCases } from '@/lib/filters';
-import { notFound } from 'next/navigation';
-
-export async function generateStaticParams() {
-  return useCases.map(uc => ({ id: uc.id }));
-}
-
-export default function CasePage({ params }: { params: { id: string } }) {
-  const useCase = useCases.find(uc => uc.id === params.id);
-  if (!useCase) notFound();
-
-  const relatedCases = getRelatedCases(useCase, useCases, 3);
-
-  return (
-    // Two-column layout with full details
-    // See design spec in original prompt
-  );
-}
-```
-
-**Layout Requirements:**
-- Back button (preserves filter state)
-- Organization name + industry + verification badge
-- Use case category headline
-- Two-column layout (60% main, 40% sidebar):
-  - **Left**: Challenge, Solution, Results, Key Insight
-  - **Right**: At a Glance (difficulty, timeline, ROI, sector), Technology, Source
-- **Below**: Success Factors, Common Challenges, Implementation Roadmap
-- **Bottom**: Related Opportunities (3 cards)
-
-**Reference Files:**
-- Design spec in original implementation prompt
-- Use existing components: `DifficultyBadge`, `VerificationBadge`, `OpportunityCard`
+### Advanced Explorer (`app/advanced/page.tsx`)
+- ✅ Card/table toggle with persistent filters and search
+- ✅ Multi-select industry/sector filters and difficulty dropdown
+- ✅ Goal/timeline checklists wired into existing filtering logic
+- ✅ Sortable results including fit score ordering
+- ✅ Responsive table view with inline actions linking to case details
 
 ---
 
-### 2. Assessment Flow (`app/assessment/page.tsx`)
-**Status:** Not started
-**Priority:** 🟡 MEDIUM
-**Effort:** ~6-8 hours
-
-**What's Needed:**
-- Three-step wizard with progress indicator
-- Question 1: Goal selection (Speed/Quality/Scale)
-- Question 2: Context (Industry dropdown + Org size)
-- Question 3: Timeline selection
-- Results page with top 3 recommendations
-- Fit score algorithm (use `calculateFitScore` from `lib/filters.ts`)
-
-**State Management:**
-```typescript
-const [answers, setAnswers] = useState({
-  goal: null,
-  industry: null,
-  orgSize: null,
-  timeline: null
-});
-
-const recommendations = useCases
-  .filter(uc => filterOpportunities([uc], answers.goal, answers.timeline, answers.industry).length > 0)
-  .map(uc => ({ ...uc, fitScore: calculateFitScore(uc, answers) }))
-  .sort((a, b) => b.fitScore - a.fitScore)
-  .slice(0, 3);
-```
-
----
-
-### 3. Advanced Explorer (`app/advanced/page.tsx`)
-**Status:** Not started
-**Priority:** 🟢 LOW (Power users only)
-**Effort:** ~4-6 hours
-
-**What's Needed:**
-- Table view with sortable columns
-- Multi-select filters (checkboxes)
-- Bulk actions (compare, export CSV)
-- Card/table toggle
-- Pagination or infinite scroll
+## 🔭 Next Opportunities
+- 🟡 Mobile navigation drawer for the header (hamburger currently inert)
+- 🟡 CSV export / compare shortlist from Advanced Explorer (design TBD)
+- 🟢 Add analytics or event tracking for filter usage
+- 🟢 Enhance dataset with difficulty metadata to reduce inference edge cases
 
 ---
 
@@ -425,22 +362,15 @@ turbopack: { root: __dirname }
 
 ---
 
-## 🔍 Testing Checklist
+## 🔍 Regression Checklist
 
-### Before Starting New Features
-- [ ] Run `npm run dev` and verify http://localhost:3000 works
-- [ ] Test goal selection with timeline
-- [ ] Verify filtering produces correct counts
-- [ ] Check that saved opportunities persist
-- [ ] Test URL sharing (copy URL, open in new tab)
-
-### After Implementing Case Details
-- [ ] Navigate to case detail from opportunity card
-- [ ] Verify all data displays correctly
-- [ ] Test back button preserves filter state
-- [ ] Check related cases are relevant
-- [ ] Test on mobile (responsive layout)
-- [ ] Verify all 21 cases have pages (no 404s)
+- ✅ Home explorer loads and filters update counts correctly
+- ✅ Goal selection + timeline still smooth-scrolls to results
+- ✅ Saved opportunities persist across reloads
+- ✅ Case detail pages render for all 21 IDs and preserve query params on back link
+- ✅ Assessment wizard validates each step, shows live match counts, and surfaces recommendations
+- ✅ Advanced explorer filters, search, sort, and view toggle behave as expected
+- ✅ URLs remain shareable (copy filtered link, open in new tab)
 
 ---
 
@@ -461,18 +391,24 @@ turbopack: { root: __dirname }
 
 ## 💡 Implementation Tips
 
-### When Creating Case Detail Pages
+### Case Detail Pages (Reference)
 1. **Start with the data**: Read one use case from `data.ts` and console.log it
 2. **Build incrementally**: Start with basic layout, then add sections
 3. **Reuse components**: Don't recreate badges or cards
 4. **Test with multiple cases**: Some have more results than others
 5. **Handle missing data**: Not all fields are always present
 
-### When Creating Assessment Flow
+### Assessment Flow (Reference)
 1. **Use existing filtering logic**: Don't rewrite, import from `lib/filters.ts`
 2. **State management**: Simple `useState` is fine, no need for Context
 3. **URL for results**: Pass answers via URL params or state
 4. **Test edge cases**: What if no recommendations match?
+
+### Advanced Explorer Enhancements
+1. **Keep filters in sync**: Reuse `filterOpportunities` and `calculateFitScore`
+2. **Mind performance**: Derived data should be memoized when possible
+3. **Table access**: Ensure rows remain keyboard navigable and responsive
+4. **Potential expansions**: CSV export, compare shortlist, pagination when dataset grows
 
 ### General Best Practices
 - **TypeScript first**: Define types before implementing
@@ -501,6 +437,13 @@ turbopack: { root: __dirname }
 - ✅ Recommendations make sense for answers
 - ✅ Links to case details work
 
+### Advanced Explorer Complete When:
+- ✅ Card/table views stay in sync with filters and search
+- ✅ Sorting applies without breaking fit-score ordering
+- ✅ Filter pills reflect selection state (clear-all resets everything)
+- ✅ Empty-state guidance appears when no matches remain
+- ✅ Table view links to case detail pages
+
 ---
 
 ## 🤝 Handoff Notes
@@ -528,6 +471,6 @@ This project is in excellent shape for continuation:
 - ✅ Clear documentation
 - ✅ Modular components ready for reuse
 
-**Start with Case Detail Pages** - they're the most impactful next feature and will unlock the full user journey.
+**Next focus:** polish the navigation (mobile drawer), explore CSV/export from Advanced Explorer, and consider enriching the dataset for even smarter recommendations.
 
 Good luck! 🎉

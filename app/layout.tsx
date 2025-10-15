@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AppProvider } from '@/lib/context';
+import { useCases, getIndustries } from '@/lib/data';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,9 +16,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const totalUseCases = useCases.length;
+const totalIndustries = getIndustries().length;
+
 export const metadata: Metadata = {
   title: 'GenAI Opportunity Explorer | Discover Proven AI Use Cases',
-  description: 'Explore 21 real-world GenAI implementations across 11 industries. Find proven opportunities to work faster, better, and at scale.',
+  description: `Explore ${totalUseCases} real-world GenAI implementations across ${totalIndustries} industries. Find proven opportunities to work faster, better, and at scale.`,
   keywords: 'GenAI, AI use cases, AI implementation, business AI, AI transformation',
 };
 

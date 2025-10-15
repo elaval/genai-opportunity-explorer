@@ -28,6 +28,8 @@ export function HomeContent() {
   const [filteredCases, setFilteredCases] = useState<UseCase[]>([]);
 
   const industries = getIndustries();
+  const totalUseCases = useCases.length;
+  const totalIndustries = industries.length;
 
   // Update URL when filters change
   const updateURL = (goal: Goal | null, timeline: Timeline | null, industry: string | null) => {
@@ -86,7 +88,7 @@ export function HomeContent() {
               Discover Your <span className="text-blue-600">GenAI</span> Opportunities
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Explore <span className="font-semibold text-gray-900">21 real-world implementations</span> across <span className="font-semibold text-gray-900">11 industries</span>. Find proven opportunities to transform your work.
+              Explore <span className="font-semibold text-gray-900">{totalUseCases} real-world {totalUseCases === 1 ? 'implementation' : 'implementations'}</span> across <span className="font-semibold text-gray-900">{totalIndustries} {totalIndustries === 1 ? 'industry' : 'industries'}</span>. Find proven opportunities to transform your work.
             </p>
           </div>
 

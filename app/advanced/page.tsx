@@ -55,6 +55,8 @@ export default function AdvancedExplorerPage() {
 
   const industries = getIndustries();
   const sectors = getSectors();
+  const datasetTotal = useCases.length;
+  const totalIndustries = industries.length;
 
   const filteredCases = useMemo(() => {
     let list = [...useCases];
@@ -169,7 +171,7 @@ export default function AdvancedExplorerPage() {
                 Advanced Opportunity Explorer
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl">
-                Compare all 21 proven implementations in a single view. Filter by industry, difficulty,
+                Compare all {datasetTotal} proven {datasetTotal === 1 ? 'implementation' : 'implementations'} in a single view. Filter by {totalIndustries} {totalIndustries === 1 ? 'industry' : 'industries'}, difficulty,
                 goal, or timeline and switch between card and table layouts to plan your roadmap.
               </p>
             </div>

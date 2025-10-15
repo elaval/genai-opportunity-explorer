@@ -1,4 +1,9 @@
 // components/Footer.tsx
+import { useCases, getIndustries } from '@/lib/data';
+
+const totalUseCases = useCases.length;
+const totalIndustries = getIndustries().length;
+
 export function Footer() {
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-20">
@@ -9,7 +14,7 @@ export function Footer() {
               About
             </h3>
             <p className="text-gray-600 text-sm">
-              Explore 21 real-world GenAI implementations across 11 industries. Find proven opportunities to work faster, better, and at scale.
+              Explore {totalUseCases} real-world GenAI {totalUseCases === 1 ? 'implementation' : 'implementations'} across {totalIndustries} {totalIndustries === 1 ? 'industry' : 'industries'}. Find proven opportunities to work faster, better, and at scale.
             </p>
           </div>
           <div>

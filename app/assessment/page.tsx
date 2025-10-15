@@ -412,6 +412,7 @@ function ContextStep({
   industryCounts,
   orgSizeCounts,
 }: ContextStepProps) {
+  const totalIndustries = industries.length;
   return (
     <div className="space-y-8">
       <div>
@@ -458,7 +459,7 @@ function ContextStep({
           </p>
         )}
         <p className="text-xs text-gray-500">
-          We currently support 11 industries covered in the GenAI opportunity atlas.
+          We currently support {totalIndustries} {totalIndustries === 1 ? 'industry' : 'industries'} covered in the GenAI opportunity atlas.
         </p>
       </div>
 
