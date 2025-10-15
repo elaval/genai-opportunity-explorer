@@ -17,14 +17,14 @@ export const timelineDifficulty: Record<Timeline, string[]> = {
 };
 
 // Get difficulty level from use case based on frameworks
-const getDifficultyFromFramework = (useCase: UseCase): string | null => {
+const getDifficultyFromFramework = (useCase: UseCase): string => {
   // Try to find matching framework
   const framework = frameworks.find(f =>
     f.typical_use_cases.toLowerCase().includes(useCase.use_case_category.toLowerCase()) ||
     f.examples.some(ex => ex.toLowerCase().includes(useCase.organization.toLowerCase()))
   );
 
-  return framework?.difficulty_level || null;
+  return framework?.difficulty_level ?? 'Medium';
 };
 
 // Main filtering function
